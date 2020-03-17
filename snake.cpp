@@ -135,6 +135,7 @@ void Snake::addSegment(Segment s) // segment is provided
 void Snake::addSegment() 
 {
 	Segment *newSegment = new Segment();
+	newSegment->symbol = m_segments.at(m_size-1)->symbol; // set body symbol to the same as the other bodies symbols
 	newSegment->nextMove = m_segments.at(m_size-1)->lastMove; // the last elements last move becomes the new ones next move
 	newSegment->lastMove = newSegment->nextMove; // set lastMove to the same as nextMove
 
