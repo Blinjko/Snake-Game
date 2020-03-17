@@ -1,6 +1,9 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include <vector> // for forward declarations
+#include <mutex> // for forward declarations
+
 enum Direction // directions that Segments of the snake can move in
 {
 	UP,
