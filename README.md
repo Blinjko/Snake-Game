@@ -1,29 +1,10 @@
 # README #
+## Latest commit: ##
+* Made snake move on its own ever 200 milliseconds, might be adjusted in the future
+* Fixed Direction enum, LEFT and RIGHT confusion, LEFT was RIGHT, and RIGHT was LEFT
 
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+## Roadmap ##
+* Add food, snake will eat food and grow by 1
+* Add border around screen that if it is hit the game is over
+* Add point counter
+* Add ending screen asking player to play again or exit 
