@@ -126,8 +126,44 @@ bool Snake::isDead(int min_y, int max_y, int min_x, int max_y) const
 
 
 
-void addSegment(Segment s); // segment is provided
-void addSegment(); // nothing is provided and the segment will be made accordingly
+void Snake::addSegment(Segment s) // segment is provided
+{
+	segments.push_back(new Segment(s)); // use copy constructor
+	++m_size;
+}
+
+void Snake::addSegment() 
+{
+	Segment *newSegment = new Segment(); // use default values
+	newSegment->nextMove = segments.at(m_size-1)->lastMove; // the last elements last move becomes the new ones next move
+	newSegment->lastMove = newSegment->nextMove; // set lastMove to the same as nextMove
+
+	newSegment->y = segments.at(m_size-1)->y; // set the new segments y to the same as the last elements
+	newSegment->x = segments.at(m_size-1)->x; // set the new segments x to the same as the last elements
+
+	switch(newSegment->nextMove)
+	{
+		case Direction::UP:
+		++newSegment->y;
+		break;
+
+		case Directino::DOWN:
+		--newSegment->y;
+		break;
+
+		case Direction::LEFT:
+		++newSegment->x;
+		break;
+
+		case Direction::RIGHT:
+		--newSegment->x;
+		break;
+	}
+
+	segments.push_back(newSegment);
+	++m_size;
+}
+
 void removeSegment(); // pop a segment off the back
 
 Segment*& at(int index); // get a particular segment at an index
