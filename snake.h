@@ -8,7 +8,7 @@ struct Segment;
 
 class Snake
 {
-	std::vector<Segment*> segments;
+	std::vector<Segment*> m_segments;
 	int m_size;
 	
 	public:

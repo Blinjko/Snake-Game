@@ -21,7 +21,7 @@ struct Segment
 
 	char symbol; // charater the segment will be printed as
 
-	Segment(int i_y, int i_x, char i_symbol, Direction i_nextMove=Direction::RIGHT) :
+	Segment(int i_y=0, int i_x=0, char i_symbol='D', Direction i_nextMove=Direction::RIGHT) :
 		y{i_y}, x{i_x}, symbol{i_symbol}, nextMove{i_nextMove}, lastMove{i_nextMove}
 	{
 	}
@@ -55,19 +55,19 @@ void moveSegment(Segment &s)
 Snake::Snake(char headSymbol, char bodySymbol, int size)
 	: m_size{size}
 {
-	segments.resize(size);
-	segments.at(0) = new Segment(0, size, headSymbol, Direction::RIGHT); // make the head of the snake 
+	m_segments.resize(size);
+	m_segments.at(0) = new Segment(0, size, headSymbol, Direction::RIGHT); // make the head of the snake 
 
 	for(int i{1}; i<size; ++i) // make the body segments
 	{
-		segments.at(i) = new Segment(0, (size-i), bodySymbol, Direction::RIGHT); // creation of body segment
+		m_segments.at(i) = new Segment(0, (size-i), bodySymbol, Direction::RIGHT); // creation of body segment
 	}
 }
 
 // snake deconstructor
 Snake::~Snake()
 {
-	for(Segment *element: segments)
+	for(Segment *element: m_segments)
 	{
 		delete element;
 	}
@@ -76,7 +76,7 @@ Snake::~Snake()
 // prints the snake
 void Snake::print(WINDOW *win) const
 {
-	for(Segment *element: segments)
+	for(Segment *element: m_segments)
 	{
 		mvwprintw(win, element->y, element->x, "%c", element->symbol);
 	}
@@ -90,26 +90,26 @@ void Snake::move()
 	{
 		if(i == 0)
 		{
-			moveSegment(*segments.at(i)); // move the head
-			segments.at(i)->lastMove = segments.at(i)->nextMove;
+			moveSegment(*m_segments.at(i)); // move the head
+			m_segments.at(i)->lastMove = m_segments.at(i)->nextMove;
 		}
 		else
 		{
-			moveSegment(*segments.at(i)); // move a body segment
-			segments.at(i)->lastMove = segments.at(i)->nextMove; // set the last lastMove to the move just made
-			segments.at(i)->nextMove = segments.at(i-1)->lastMove; // set the nextMove to the move just made by the segment before
+			moveSegment(*m_segments.at(i)); // move a body segment
+			m_segments.at(i)->lastMove = m_segments.at(i)->nextMove; // set the last lastMove to the move just made
+			m_segments.at(i)->nextMove = m_segments.at(i-1)->lastMove; // set the nextMove to the move just made by the segment before
 		}
 	}
 }
 
 // checks to see if the snake has collided with itself
-bool Snake::isDead(int min_y, int max_y, int min_x, int max_y) const
+bool Snake::isDead(int min_y, int max_y, int min_x, int max_x) const
 {
-	Segment &head = *segments.at(0); // get the head
+	Segment &head = *m_segments.at(0); // get the head
 
 	for(int i{1}; i<m_size; ++i)
 	{
-		if((segments.at(i)->y == head.y) && (segments.at(i)->x == head.x))
+		if((m_segments.at(i)->y == head.y) && (m_segments.at(i)->x == head.x))
 		{
 			return true; // collision found
 		}
@@ -128,18 +128,18 @@ bool Snake::isDead(int min_y, int max_y, int min_x, int max_y) const
 
 void Snake::addSegment(Segment s) // segment is provided
 {
-	segments.push_back(new Segment(s)); // use copy constructor
+	m_segments.push_back(new Segment(s)); // use copy constructor
 	++m_size;
 }
 
 void Snake::addSegment() 
 {
-	Segment *newSegment = new Segment(); // use default values
-	newSegment->nextMove = segments.at(m_size-1)->lastMove; // the last elements last move becomes the new ones next move
+	Segment *newSegment = new Segment();
+	newSegment->nextMove = m_segments.at(m_size-1)->lastMove; // the last elements last move becomes the new ones next move
 	newSegment->lastMove = newSegment->nextMove; // set lastMove to the same as nextMove
 
-	newSegment->y = segments.at(m_size-1)->y; // set the new segments y to the same as the last elements
-	newSegment->x = segments.at(m_size-1)->x; // set the new segments x to the same as the last elements
+	newSegment->y = m_segments.at(m_size-1)->y; // set the new segments y to the same as the last elements
+	newSegment->x = m_segments.at(m_size-1)->x; // set the new segments x to the same as the last elements
 
 	switch(newSegment->nextMove)
 	{
@@ -147,7 +147,7 @@ void Snake::addSegment()
 		++newSegment->y;
 		break;
 
-		case Directino::DOWN:
+		case Direction::DOWN:
 		--newSegment->y;
 		break;
 
@@ -160,14 +160,26 @@ void Snake::addSegment()
 		break;
 	}
 
-	segments.push_back(newSegment);
+	m_segments.push_back(newSegment);
 	++m_size;
 }
 
-void removeSegment(); // pop a segment off the back
+// pop a segment off the back
+void Snake::removeSegment()
+{
+	m_segments.pop_back(); // pop off last element
+	--m_size;
+}
 
-Segment*& at(int index); // get a particular segment at an index
+// get a certian segment provided an index
+Segment*& Snake::at(int index)
+{
+		return m_segments.at(index); // already does bounds checking
+}
 
-std::vector<Segment*>& get(); // returns the Segment vector
+// returns the vector of segment pointers
+std::vector<Segment*>& Snake::get() 
+{
+	return m_segments;
+}
 
-int size() const { return m_size; }
