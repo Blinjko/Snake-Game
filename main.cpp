@@ -36,12 +36,12 @@ struct Segment // Segment object to represent each body segment of the snake
 
 // forward declarations
 void threadOneJob(); // fucntion that moves the snake
+void threadTwoJob(std::vector<Segment> &s, std::mutex &m); // thread two job, will listen for input while thread 1 moves the snake
 Direction getInput(); // gets input and depending on arrow key pressed it returns the corresponding Direction type
 void printSnake(std::vector<Segment> &snake); // prints the snake to the screen
 void moveSegments(std::vector<Segment> &snake); // after input is gotten and the heads direction is changed, call this to move the body segments appropriately
 void moveSegment(Segment &s); // moves a singular segment based upon its next movement
 bool findCollision(std::vector<Segment> &snake); // looks to see if the snakes head has hit one of the body segments, if so return true, else return false
-void threadTwoJob(Segment &head, std::mutex &m); // thread 2's job, will listen for input from keyboard
 
 int main()
 {
@@ -150,6 +150,7 @@ bool findCollision(std::vector<Segment> &snake) // finds out if the snake has co
 }
 
 
+
 void threadTwoJob(std::vector<Segment> &s, std::mutex &m)
 {
 	Direction input;
@@ -171,61 +172,20 @@ void threadTwoJob(std::vector<Segment> &s, std::mutex &m)
 		}
 		else if(input == UP && s.at(0).nextMove == DOWN)
 		{
-			collision == findCollision(s);
+			collision = findCollision(s);
 		}
 		else if(input == DOWN && s.at(0).nextMove == UP)
 		{
-			collision == findCollision(s);
+			collision = findCollision(s);
 		}
 		else if(input == MAX_DIRECTIONS)
 		{
-			collision == findCollision(s);
+			collision = findCollision(s);
 		}
 		else
 		{
 			s.at(0).nextMove = input;
-		}
-
-
-	}
-}
-
-
-
-void test(std::vector<Segment> &s, std::mutex &m)
-{
-	Direction input;
-	bool collision = false;
-	while(!collision)
-	{
-		input = getInput();
-
-		std::lock_guard<std::mutex> lock{m}; // lock the mutex so a race condition does not happen
-
-		//check if the gotten direction is opposite current one, causing the snake to go inside itself
-		if(input == RIGHT && s.at(0).nextMove == LEFT)
-		{
 			collision = findCollision(s);
-		}
-		else if(input == LEFT && s.at(0).nextMove == RIGHT)
-		{
-			collision = findCollision(s);
-		}
-		else if(input == UP && s.at(0).nextMove == DOWN)
-		{
-			collision == findCollision(s);
-		}
-		else if(input == DOWN && s.at(0).nextMove == UP)
-		{
-			collision == findCollision(s);
-		}
-		else if(input == MAX_DIRECTIONS)
-		{
-			collision == findCollision(s);
-		}
-		else
-		{
-			s.at(0).nextMove = input;
 		}
 
 
@@ -247,7 +207,7 @@ void threadOneJob() // function to take care of moving the snake
 	bool collision = false; // true if snake has collided with itself, false if snake has not collided with itself
 
 	
-	std::thread t2{test, std::ref(snake), std::ref(snakeMutex)};
+	std::thread t2{threadTwoJob, std::ref(snake), std::ref(snakeMutex)};
 
 	while(!collision) // while the snake has not collided with itself
 	{
