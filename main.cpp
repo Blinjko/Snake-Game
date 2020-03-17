@@ -162,19 +162,19 @@ void threadTwoJob(std::vector<Segment> &s, std::mutex &m)
 		std::lock_guard<std::mutex> lock{m}; // lock the mutex so a race condition does not happen
 
 		//check if the gotten direction is opposite current one, causing the snake to go inside itself
-		if(input == RIGHT && s.at(0).nextMove == LEFT)
+		if(input == RIGHT && s.at(0).lastMove == LEFT)
 		{
 			collision = findCollision(s);
 		}
-		else if(input == LEFT && s.at(0).nextMove == RIGHT)
+		else if(input == LEFT && s.at(0).lastMove == RIGHT)
 		{
 			collision = findCollision(s);
 		}
-		else if(input == UP && s.at(0).nextMove == DOWN)
+		else if(input == UP && s.at(0).lastMove == DOWN)
 		{
 			collision = findCollision(s);
 		}
-		else if(input == DOWN && s.at(0).nextMove == UP)
+		else if(input == DOWN && s.at(0).lastMove == UP)
 		{
 			collision = findCollision(s);
 		}
