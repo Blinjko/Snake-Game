@@ -10,6 +10,7 @@ int main()
 	noecho();
 	keypad(stdscr, true);
 
+
 	std::thread t1{threadOneJob};
 	t1.join();
 	
