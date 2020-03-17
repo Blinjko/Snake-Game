@@ -4,7 +4,10 @@
 #include <vector>
 #include <ncurses.h>
 
+
+enum class Direction;
 struct Segment;
+void moveSegment(Segment&);
 
 class Snake
 {
@@ -13,7 +16,7 @@ class Snake
 	
 	public:
 
-		Snake(char headSymbol='H', char bodySymbol='B', int size=4);
+		Snake(char headSymbol, char bodySymbol, int size);
 	
 		~Snake();
 
@@ -31,7 +34,7 @@ class Snake
 
 		std::vector<Segment*>& get(); // returns the Segment vector
 	
-		int size() const { return m_size; }
+		int size() const;
 
 };
 #endif
