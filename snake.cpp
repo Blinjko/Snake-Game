@@ -102,8 +102,29 @@ void Snake::move()
 	}
 }
 
+// checks to see if the snake has collided with itself
+bool Snake::isDead(int min_y, int max_y, int min_x, int max_y) const
+{
+	Segment &head = *segments.at(0); // get the head
 
-bool isDead() const;
+	for(int i{1}; i<m_size; ++i)
+	{
+		if((segments.at(i)->y == head.y) && (segments.at(i)->x == head.x))
+		{
+			return true; // collision found
+		}
+	}
+
+	if((head.x == min_x) || (head.x == max_x))
+		return true; // head hit left or right border 
+
+	else if((head.y == min_y) || (head.y == max_y))
+		return true; // head hit top of bottom border
+
+	return false; // no collision found
+}
+
+
 
 void addSegment(Segment s); // segment is provided
 void addSegment(); // nothing is provided and the segment will be made accordingly

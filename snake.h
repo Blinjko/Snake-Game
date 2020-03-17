@@ -21,7 +21,7 @@ class Snake
 
 		void move();
 
-		bool isDead() const;
+		bool isDead(int min_y, int max_y, int min_x, int max_x) const;
 
 		void addSegment(Segment s); // segment is provided
 		void addSegment(); // nothing is provided and the segment will be made accordingly
