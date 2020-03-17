@@ -1,4 +1,4 @@
-#include "snake.cpp"
+#include "snake.h"
 #include <ncurses.h>
 #include <vector>
 
