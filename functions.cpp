@@ -187,7 +187,7 @@ void threadOneJob() // function to take care of moving the snake
 	while(!collision) // while the snake has not collided with itself
 	{
 		//snake.at(0).nextMove = getInput(snake.at(0).nextMove); // get the heads direction based on user input, visit getInput() for more info
-		std::this_thread::sleep_for(std::chrono::milliseconds(200)); // have t1 sleep for 200 milliseconds
+		std::this_thread::sleep_for(std::chrono::milliseconds(100)); // have t1 sleep for 100 milliseconds
 
 		std::lock_guard<std::mutex> lock{snakeMutex};
 		moveSegments(snake);
