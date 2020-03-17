@@ -1,3 +1,4 @@
+#include "functions.h"
 #include <ncurses.h>
 #include <chrono>
 #include <vector>
@@ -6,14 +7,6 @@
 #include <ctime>
 #include <random>
 
-enum Direction // directions that Segments of the snake can move in
-{
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT,
-	MAX_DIRECTIONS,
-};
 
 struct Segment // Segment object to represent each body segment of the snake
 {
@@ -36,29 +29,7 @@ struct Segment // Segment object to represent each body segment of the snake
 
 };
 
-// forward declarations
-void threadOneJob(); // fucntion that moves the snake
-void threadTwoJob(std::vector<Segment> &s, std::mutex &m); // thread two job, will listen for input while thread 1 moves the snake
-Direction getInput(); // gets input and depending on arrow key pressed it returns the corresponding Direction type
-void printSnake(std::vector<Segment> &snake); // prints the snake to the screen
-void moveSegments(std::vector<Segment> &snake); // after input is gotten and the heads direction is changed, call this to move the body segments appropriately
-void moveSegment(Segment &s); // moves a singular segment based upon its next movement
-bool findCollision(std::vector<Segment> &snake); // looks to see if the snakes head has hit one of the body segments, if so return true, else return false
-int generateRandom(int min, int max); // generates a random between the range of min and max
 
-int main()
-{
-	initscr();
-	noecho();
-	keypad(stdscr, true);
-
-	std::thread t1{threadOneJob};
-	t1.join();
-	
-
-	endwin();
-	return 0;
-}
 
 Direction getInput() // gets input from keyboard and returns a proper direction if an arrow key is pressed, if another key is pressed, them MAX_DIRECTIONS is returned
 {
@@ -85,7 +56,7 @@ Direction getInput() // gets input from keyboard and returns a proper direction 
 
 }
 
-				       
+
 void printSnake(std::vector<Segment> &snake) // function to print the snake, automatically clears and refreshs the screen
 {
 	clear();
@@ -102,20 +73,20 @@ void moveSegment(Segment &s) // moves a singular segment based upon its next mov
 	switch(s.nextMove)
 	{
 		case DOWN:
-		++s.y;
-		break;
+			++s.y;
+			break;
 
 		case UP:
-		--s.y;
-		break;
+			--s.y;
+			break;
 
 		case RIGHT:
-		++s.x;
-		break;
+			++s.x;
+			break;
 
 		case LEFT:
-		--s.x;
-		break;
+			--s.x;
+			break;
 	}
 }
 
@@ -141,7 +112,7 @@ void moveSegments(std::vector<Segment> &snake) // function to move all of a snak
 bool findCollision(std::vector<Segment> &snake) // finds out if the snake has collided with itself, if it has return true, if not return false
 {
 	Segment& head = snake.at(0); // get the head
-	
+
 	for(std::size_t i{1}; i<snake.size(); ++i)
 	{
 		if((head.x == snake.at(i).x) && (head.y == snake.at(i).y)) // checks if snake head coordinates are the same as a body parts
@@ -201,7 +172,7 @@ void threadOneJob() // function to take care of moving the snake
 	std::mutex snakeMutex; // mutex for threads
 
 	std::vector<Segment> snake = {Segment(0,4,'H',RIGHT)}; // element 0 head of the snake
-	
+
 	// snake body segments
 	snake.resize(4); // resize once for efficiency
 	snake.at(1) = Segment(0,3,'B',RIGHT); // body segment 2
@@ -210,7 +181,7 @@ void threadOneJob() // function to take care of moving the snake
 
 	bool collision = false; // true if snake has collided with itself, false if snake has not collided with itself
 
-	
+
 	std::thread t2{threadTwoJob, std::ref(snake), std::ref(snakeMutex)};
 
 	while(!collision) // while the snake has not collided with itself
