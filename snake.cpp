@@ -40,4 +40,10 @@ Snake::Snake(char headSymbol, char bodySymbol, int size)
 	}
 }
 
-
+Snake::~Snake()
+{
+	for(Segment *element: segments)
+	{
+		delete element;
+	}
+}
