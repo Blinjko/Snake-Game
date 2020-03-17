@@ -2,31 +2,6 @@
 #include <ncurses.h>
 #include <vector>
 
-enum class Direction
-{
-	RIGHT,
-	LEFT,
-	UP,
-	DOWN,
-	MAX_DIRECTIONS,
-};
-
-
-struct Segment
-{
-	int y; // y coordinate
-	int x; // x coordinate
-	Direction lastMove; // last moving direction
-	Direction nextMove; // next moving direction
-
-	char symbol; // charater the segment will be printed as
-
-	Segment(int i_y=0, int i_x=0, char i_symbol='D', Direction i_nextMove=Direction::RIGHT) :
-		y{i_y}, x{i_x}, symbol{i_symbol}, nextMove{i_nextMove}, lastMove{i_nextMove}
-	{
-	}
-};
-
 // moves a segment based upon its movements
 void moveSegment(Segment &s)
 {

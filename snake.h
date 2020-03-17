@@ -4,9 +4,31 @@
 #include <vector>
 #include <ncurses.h>
 
+enum class Direction
+{
+	RIGHT,
+	LEFT,
+	UP,
+	DOWN,
+	MAX_DIRECTIONS,
+};
 
-enum class Direction;
-struct Segment;
+
+struct Segment
+{
+	int y; // y coordinate
+	int x; // x coordinate
+	Direction lastMove; // last moving direction
+	Direction nextMove; // next moving direction
+
+	char symbol; // charater the segment will be printed as
+
+	Segment(int i_y=0, int i_x=0, char i_symbol='D', Direction i_nextMove=Direction::RIGHT) :
+		y{i_y}, x{i_x}, symbol{i_symbol}, nextMove{i_nextMove}, lastMove{i_nextMove}
+	{
+	}
+};
+
 void moveSegment(Segment&);
 
 class Snake
