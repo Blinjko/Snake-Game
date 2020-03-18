@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include <vector>
 #include <thread>
+#include "food.h"
 
 int main()
 {
