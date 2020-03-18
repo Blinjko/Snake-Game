@@ -12,7 +12,7 @@
 // constructor
 Game::Game(Snake s, Food f, WINDOW *window, int min_y, int max_y, int min_x, int max_x) :
        m_snake{s}, m_food{f}, m_window{window}, m_max_y{max_y}, m_max_x{max_x}, m_min_y{min_y}, m_min_x{min_x},
-       m_points{0}, m_over{false}, m_mt{static_cast<std::size_t>(std::time(nullptr))}; // seed the rng with system time 
+       m_points{0}, m_over{false}, m_mt{static_cast<std::size_t>(std::time(nullptr))} // seed the rng with system time 
 {
 }	
 
@@ -83,5 +83,27 @@ void Game::getInput()
 int Game::generateRandom(int min, int max)
 {
 	std::uniform_int_distribution<int> random{min,max};
-	return random{m_mt}; // return a random number
+	return random(m_mt); // return a random number
+}
+
+// moves the food to a random location
+void Game::spawnFood()
+{
+	int newY{generateRandom(m_min_y, m_max_y)}; // generate new y coordinate
+	int newX{generateRandom(m_min_x, m_max_x)};
+
+	// check to see if the food spawned inside the snake
+	for(int i{0}; i<m_snake.size(); ++i)
+	{
+		// food spawned inside the snake
+		if((m_snake.at(i)->y == newY) && (m_snake.at(i)->x == newX)) 
+		{
+			// generate new coordinates
+			newY = generateRandom(m_min_y, m_max_y);
+			newX = generateRandom(m_min_x, m_max_x);
+			
+			// set i to 0 to once again make sure the food did not spawn in the snake
+			i = 0;
+		}
+	}
 }
