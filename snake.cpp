@@ -31,13 +31,30 @@ Snake::Snake(char headSymbol, char bodySymbol, int size)
 	: m_size{size}
 {
 	m_segments.resize(size);
-	m_segments.at(0) = new Segment(0, size, headSymbol, Direction::RIGHT); // make the head of the snake 
+	m_segments.at(0) = new Segment(1, size, headSymbol, Direction::RIGHT); // make the head of the snake 
 
 	for(int i{1}; i<size; ++i) // make the body segments
 	{
-		m_segments.at(i) = new Segment(0, (size-i), bodySymbol, Direction::RIGHT); // creation of body segment
+		m_segments.at(i) = new Segment(1, (size-i), bodySymbol, Direction::RIGHT); // creation of body segment
 	}
 }
+
+// copy constructor
+Snake::Snake(Snake &s) : m_size{s.m_size}
+{
+	// resize once for efficiency
+	m_segments.resize(m_size);
+
+	Segment *copying;
+
+	for(int i{0}; i<m_size; ++i)
+	{
+		copying = s.m_segments.at(i);
+
+		m_segments.at(i) = new Segment(copying->y, copying->x, copying->symbol, copying->nextMove);
+	}
+}
+
 
 // snake deconstructor
 Snake::~Snake()

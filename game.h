@@ -40,7 +40,7 @@ class Game
 
 	Game(Snake s, Food f, WINDOW *window, int min_y, int max_y, int min_x, int max_x);
 
-	bool play(); // returns true if the player won, false if otherwise
+	int play(); // returns true if the player won, false if otherwise
 
 	private:
 
