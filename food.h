@@ -1,6 +1,8 @@
 #ifndef FOOD_H
 #define FOOD_H
 
+#include <ncurses.h>
+
 class Food
 {
 	int m_y;

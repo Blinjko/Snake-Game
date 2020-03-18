@@ -17,41 +17,41 @@ void Food::move(int y, int x)
 // print the food as m_symbol to the specified window
 void Food::print(WINDOW *win) const
 {
-	mvwprintw(win, m_y, m_x, "%c", symbol);
+	mvwprintw(win, m_y, m_x, "%c", m_symbol);
 }
 
 // set the y coordinate
-void setY(int y)
+void Food::setY(int y)
 {
 	m_y = y;
 }
 
 // set the x coordinate
-void setX(int x)
+void Food::setX(int x)
 {
 	m_x = x;
 }
 
 // get the y coordinate
-int getY() const
+int Food::getY() const
 {
 	return m_y;
 }
 
 // get the x coordinate
-int getX() const
+int Food::getX() const
 {
 	return m_x;
 }
 
 // set the symbol
-void setSymbol(char symbol)
+void Food::setSymbol(char symbol)
 {
 	m_symbol = symbol;
 }
 
 // get the symbol
-char getSymbol() const
+char Food::getSymbol() const
 {
 	return m_symbol;
 }

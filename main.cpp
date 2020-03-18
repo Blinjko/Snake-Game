@@ -1,6 +1,7 @@
 #include "snake.h"
 #include <ncurses.h>
 #include <vector>
+#include <thread>
 
 int main()
 {
