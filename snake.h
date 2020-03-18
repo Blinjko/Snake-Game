@@ -35,28 +35,28 @@ class Snake
 {
 	std::vector<Segment*> m_segments;
 	int m_size;
-	
+
 	public:
 
-		Snake(char headSymbol, char bodySymbol, int size);
-	
-		~Snake();
+	Snake(char headSymbol, char bodySymbol, int size);
 
-		void print(WINDOW *win) const;
+	~Snake();
 
-		void move();
+	void print(WINDOW *win) const;
 
-		bool isDead(int min_y, int max_y, int min_x, int max_x) const;
+	void move();
 
-		void addSegment(Segment s); // segment is provided
-		void addSegment(); // nothing is provided and the segment will be made accordingly
-		void removeSegment(); // pop a segment off the back
+	bool isDead(int min_y, int max_y, int min_x, int max_x) const;
 
-		Segment*& at(int index); // get a particular segment at an index
+	void addSegment(Segment s); // segment is provided
+	void addSegment(); // nothing is provided and the segment will be made accordingly
+	void removeSegment(); // pop a segment off the back
 
-		std::vector<Segment*>& get(); // returns the Segment vector
-	
-		int size() const;
+	Segment*& at(int index); // get a particular segment at an index
+
+	std::vector<Segment*>& get(); // returns the Segment vector
+
+	int size() const; // gets the size of the snake
 
 };
 #endif

@@ -158,4 +158,5 @@ std::vector<Segment*>& Snake::get()
 {
 	return m_segments;
 }
+
 int Snake::size() const { return m_size; }
