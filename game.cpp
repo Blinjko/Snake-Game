@@ -4,6 +4,7 @@
 #include <thread>
 #include <random>
 #include <ctime>
+#include <chrono>
 #include "game.h"
 #include "food.h"
 #include "snake.h"
@@ -40,11 +41,11 @@ void Game::getInput()
 			newMove = Direction::LEFT;
 			break;
 
-			case 261:
+			case 261: // right arrow key
 			newMove = Direction::RIGHT;
 			break;
 
-			default:
+			default: // an arrow key was not pressed
 			newMove = Direction::MAX_DIRECTIONS;
 			break;
 		}
@@ -77,7 +78,6 @@ void Game::getInput()
 		else
 		{
 			m_snake.at(0)->nextMove = newMove;
-			break;
 		}
 	}
 
@@ -127,30 +127,33 @@ bool Game::foodEaten()
 // the function that starts the snake game, returns the score
 int Game::play()
 {
-	// start another thread to get input
-	//std::thread t2{getInput};
-
-	// clear anything that was on the screen
-	wclear(m_window);
-	
 	// initial setup
-	spawnFood();
-	m_food.print(m_window);
-	m_snake.print(m_window);
-	wrefresh(m_window);
+	wclear(m_window); // clear the window
+	wborder(m_window, '|','|', '-', '-', '+', '+', '+', '+'); // print a border
+	spawnFood(); // spawn a piece of food
+	m_food.print(m_window); // print the food
+	m_snake.print(m_window); // print the snake
+	wrefresh(m_window); // refresh to display everything
+
+	// start a thread that listens for input while the current thread prints and moves the snake
+	std::thread t1{&Game::getInput, this};
 
 	while(true)
 	{
-		getInput();
+		// make the current thread sleep, this is how much time is inbetween the snakes movements
+		std::this_thread::sleep_for(std::chrono::milliseconds(150));
 
-		m_snake.move();
+		// lock the mutex to avoid race condition
+		std::lock_guard<std::mutex> lock{m_gameMutex};
+
+		m_snake.move(); // move the snake
 		
-		// snake hit itself and and game is over
+		// check if snake hit itself 
 		if(m_snake.isDead(m_min_y, m_max_y, m_min_x, m_max_x))
 		{
 			m_over = true;
 			clear();
-			mvprintw(0,0, "Snake ded");
+			mvprintw(0,0, "Game Over, press any key to continue");
 			refresh();
 			break;
 		}
@@ -168,16 +171,13 @@ int Game::play()
 			++m_points;
 		}
 
-		// print the snake and food
-		wclear(m_window);
-		m_snake.print(m_window);
-		m_food.print(m_window);
-		wborder(m_window, '|','|', '-', '-', '+', '+', '+', '+');
-		wrefresh(m_window);
-		
-		// move cursor into corner for prettiness
-		wmove(m_window, 0,0);
+		wclear(m_window); // clear the window
+		m_snake.print(m_window); // print the snake
+		m_food.print(m_window); // print the food
+		wborder(m_window, '|','|', '-', '-', '+', '+', '+', '+'); // print the border
+		wmove(m_window, 0,0); // move the cursor in the corner for neatness
+		wrefresh(m_window); // refresh the screen
 	}
+	t1.join(); // wait for the spawned thread (t1) to join with the current thread before returning
 	return m_points;
 }
-

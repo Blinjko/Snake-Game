@@ -117,13 +117,14 @@ bool Snake::isDead(int min_y, int max_y, int min_x, int max_x) const
 }
 
 
-
+// adds the provided segment to the snake
 void Snake::addSegment(Segment s) // segment is provided
 {
 	m_segments.push_back(new Segment(s)); // use copy constructor
 	++m_size;
 }
 
+// generates a new segment based upon the last segement in the snake, then adds it to the end of the snake
 void Snake::addSegment() 
 {
 	Segment *newSegment = new Segment();
@@ -176,4 +177,5 @@ std::vector<Segment*>& Snake::get()
 	return m_segments;
 }
 
+// returns the size of the snake
 int Snake::size() const { return m_size; }
