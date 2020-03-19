@@ -10,7 +10,7 @@ This is a version of the snake game that I rewrote in C++ using the ncurses libr
 
 ## How To Build ##
 1. Make sure all requirements are met
-2. Clone the repository using `git clone`
+2. Clone the repository using `git clone https://Blinjko@bitbucket.org/Blinjko/snake-game.git`
 3. cd into the cloned directory
 4. Execute the command `make` 
 5. Start the game by doing `./snake`
